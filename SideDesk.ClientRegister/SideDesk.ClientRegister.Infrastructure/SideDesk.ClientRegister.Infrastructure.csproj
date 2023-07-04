@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
+    <PackageReference Include="SideDesk.Nugget.Cryptography" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SideDesk.ClientRegister.Application\SideDesk.ClientRegister.Application.csproj" />
+  </ItemGroup>
+
 </Project>

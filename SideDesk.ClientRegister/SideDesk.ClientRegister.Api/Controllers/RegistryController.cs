@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SideDesk.ClientRegister.Domain.Interfaces.Application;
+using SideDesk.ClientRegister.Domain.Models.Registry;
+using SideDesk.ClientRegister.Infrastructure.Helpers;
 
 namespace SideDesk.ClientRegister.Api.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
-	public class RegistryController : Controller
+	public class RegistryController : ControllerBase
 	{
 		private readonly IRegistryApplication _registryApplication;
 
@@ -14,11 +16,11 @@ namespace SideDesk.ClientRegister.Api.Controllers
 			_registryApplication = registryApplication;
 		}
 
-		[HttpGet]
-		public IActionResult Index()
+		[HttpPost]
+		public IActionResult Registry(RegistryRest rest)
 		{
-			_registryApplication.Registry();
-			return View();
+			_registryApplication.Registry(rest);
+			return Ok();
 		}
 	}
 }

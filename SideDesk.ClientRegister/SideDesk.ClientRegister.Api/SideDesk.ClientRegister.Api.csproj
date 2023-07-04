@@ -7,12 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SideDesk.ClientRegister.Application\SideDesk.ClientRegister.Application.csproj" />
     <ProjectReference Include="..\SideDesk.ClientRegister.Domain\SideDesk.ClientRegister.Domain.csproj" />
+    <ProjectReference Include="..\SideDesk.ClientRegister.Infrastructure\SideDesk.ClientRegister.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
