@@ -12,7 +12,11 @@ namespace SideDesk.ClientRegister.Infrastructure.Context
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.HasDefaultSchema("public");
+			ConfigureMappings(modelBuilder);
+		}
 
+		private void ConfigureMappings(ModelBuilder modelBuilder)
+		{
 			modelBuilder.ApplyConfiguration(new ClientMapping());
 		}
 	}
