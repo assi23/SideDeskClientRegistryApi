@@ -1,29 +1,27 @@
-﻿using SideDesk.ClientRegister.Application.Entities;
+﻿using AutoMapper;
+using SideDesk.ClientRegister.Application.Entities;
 using SideDesk.ClientRegister.Domain.Interfaces.Application;
 using SideDesk.ClientRegister.Domain.Interfaces.Repositories;
 using SideDesk.ClientRegister.Domain.Models.Registry;
-using System.Security.Cryptography;
 
 namespace SideDesk.ClientRegister.Application.Applications
 {
 	public class RegistryApplication : IRegistryApplication
 	{
 		private readonly IClientRepository _clientRepository;
+		private readonly IMapper _mapper;
 
-		public RegistryApplication(IClientRepository clientRepository)
-        {
+		public RegistryApplication(IClientRepository clientRepository, IMapper mapper)
+		{
 			_clientRepository = clientRepository;
+			_mapper = mapper;
 		}
 
-        public void Registry(RegistryRest rest)
+		public void Registry(RegistryRest rest)
 		{
-			var entity = new Client()
-			{
-				Name = rest.Name,
-				Document = rest.Document,
-			};
+			var entity = _mapper.Map<Client>(rest);
 
-			 _clientRepository.Create(entity);
+			_clientRepository.Create(entity);
 			_clientRepository.SaveChanges();
 		}
 	}

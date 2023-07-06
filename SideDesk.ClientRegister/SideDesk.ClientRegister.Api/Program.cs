@@ -1,4 +1,5 @@
 using SideDesk.ClientRegister.Application.Applications;
+using SideDesk.ClientRegister.Domain.AutoMapperProfile;
 using SideDesk.ClientRegister.Domain.Interfaces.Application;
 using SideDesk.ClientRegister.Domain.Interfaces.Repositories;
 using SideDesk.ClientRegister.Infrastructure.Context;
@@ -11,6 +12,7 @@ public class Program
 	static void Main(string[] args)
 	{
 		var builder = WebApplication.CreateBuilder(args);
+
 		ConfigureServices(builder.Services, builder.Configuration);
 
 		var app = builder.Build();
@@ -33,9 +35,15 @@ public class Program
 		services.AddControllers();
 		services.AddEndpointsApiExplorer();
 		services.AddSwaggerGen();
-		services.AddNpgsql<DataContext>(configuration.GetConnectionString("default").DecryptConnectionString());
+		services.AddNpgsql<DataContext>(configuration?.GetConnectionString("default")?.DecryptConnectionString());
 
+		ConfigureAutoMapper(services);
 		ConfigureDependencyInjection(services);
+	}
+
+	private static void ConfigureAutoMapper(IServiceCollection services)
+	{
+		services.AddAutoMapper(typeof(ClientProfile));
 	}
 
 	private static void ConfigureDependencyInjection(IServiceCollection services)
