@@ -1,5 +1,5 @@
 using SideDesk.ClientRegister.Application.Applications;
-using SideDesk.ClientRegister.Domain.AutoMapperProfile;
+using SideDesk.ClientRegister.Domain.General.AutoMapperProfile;
 using SideDesk.ClientRegister.Domain.Interfaces.Application;
 using SideDesk.ClientRegister.Domain.Interfaces.Repositories;
 using SideDesk.ClientRegister.Infrastructure.Context;

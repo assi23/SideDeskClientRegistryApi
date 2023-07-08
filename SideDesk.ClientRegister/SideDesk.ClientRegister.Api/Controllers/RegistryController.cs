@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SideDesk.ClientRegister.Domain.General.Result;
 using SideDesk.ClientRegister.Domain.Interfaces.Application;
-using SideDesk.ClientRegister.Domain.Models.Registry;
-using SideDesk.ClientRegister.Infrastructure.Helpers;
+using SideDesk.ClientRegister.Domain.Models.Registry.Registry;
 
 namespace SideDesk.ClientRegister.Api.Controllers
 {
@@ -11,16 +11,22 @@ namespace SideDesk.ClientRegister.Api.Controllers
 	{
 		private readonly IRegistryApplication _registryApplication;
 
-		public RegistryController(IRegistryApplication registryApplication) 
+		public RegistryController(IRegistryApplication registryApplication)
 		{
 			_registryApplication = registryApplication;
 		}
 
 		[HttpPost]
-		public IActionResult Registry(RegistryRest rest)
+		[ProducesResponseType(typeof(IResult<RegistryResponse>), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(IResult<RegistryResponse>), StatusCodes.Status400BadRequest)]
+		public ActionResult<IResult<RegistryResponse>> Registry(RegistryRequest request)
 		{
-			_registryApplication.Registry(rest);
-			return Ok();
+			var registry =  _registryApplication.Registry(request);
+
+			if (registry.Success)
+				return Ok(registry);
+
+			return BadRequest(registry);
 		}
 	}
 }

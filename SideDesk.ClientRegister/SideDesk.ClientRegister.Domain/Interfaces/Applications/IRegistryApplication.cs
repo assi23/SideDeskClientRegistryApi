@@ -1,10 +1,10 @@
-﻿using Microsoft.Win32;
-using SideDesk.ClientRegister.Domain.Models.Registry;
+﻿using SideDesk.ClientRegister.Domain.General.Result;
+using SideDesk.ClientRegister.Domain.Models.Registry.Registry;
 
 namespace SideDesk.ClientRegister.Domain.Interfaces.Application
 {
 	public interface IRegistryApplication
 	{
-		void Registry(RegistryRest rest);
+		IResult<RegistryResponse> Registry(RegistryRequest request);
 	}
 }
