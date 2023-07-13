@@ -7,7 +7,7 @@ using SideDesk.ClientRegister.Domain.Models.Registry.Registry;
 
 namespace SideDesk.ClientRegister.Application.Applications
 {
-    public class RegistryApplication : IRegistryApplication
+	public class RegistryApplication : IRegistryApplication
 	{
 		private readonly IClientRepository _clientRepository;
 		private readonly IMapper _mapper;
@@ -35,9 +35,9 @@ namespace SideDesk.ClientRegister.Application.Applications
 				return Result<RegistryResponse>.CreateSuccess(response);
 
 			}
-			catch (Exception ex)
+			catch
 			{
-				return Result<RegistryResponse>.CreateFailure(ex.Message);
+				return Result<RegistryResponse>.CreateFailure("An internal error occurred, try again later!");
 			}
 		}
 	}
