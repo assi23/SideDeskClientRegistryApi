@@ -3,8 +3,8 @@ using SideDesk.ClientRegister.Domain.General.AutoMapperProfile;
 using SideDesk.ClientRegister.Domain.Interfaces.Application;
 using SideDesk.ClientRegister.Domain.Interfaces.Repositories;
 using SideDesk.ClientRegister.Infrastructure.Context;
-using SideDesk.ClientRegister.Infrastructure.Helpers;
 using SideDesk.ClientRegister.Infrastructure.Repository;
+using SideDesk.Nugget.Cryptography.Services;
 
 namespace SideDesk.ClientRegister;
 public class Program
@@ -35,7 +35,7 @@ public class Program
 		services.AddControllers();
 		services.AddEndpointsApiExplorer();
 		services.AddSwaggerGen();
-		services.AddNpgsql<DataContext>(configuration?.GetConnectionString("default")?.DecryptConnectionString());
+		services.AddNpgsql<DataContext>(configuration?.GetConnectionString("default")?.Decrypt());
 
 		ConfigureAutoMapper(services);
 		ConfigureDependencyInjection(services);
