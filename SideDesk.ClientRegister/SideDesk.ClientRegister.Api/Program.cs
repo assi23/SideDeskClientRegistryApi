@@ -1,10 +1,4 @@
-using SideDesk.ClientRegister.Application.Applications;
-using SideDesk.ClientRegister.Domain.General.AutoMapperProfile;
-using SideDesk.ClientRegister.Domain.Interfaces.Application;
-using SideDesk.ClientRegister.Domain.Interfaces.Repositories;
-using SideDesk.ClientRegister.Infrastructure.Context;
-using SideDesk.ClientRegister.Infrastructure.Repository;
-using SideDesk.Nugget.Cryptography.Services;
+using SideDesk.ClientRegister.Api.Configuration;
 
 namespace SideDesk.ClientRegister;
 public class Program
@@ -35,20 +29,9 @@ public class Program
 		services.AddControllers();
 		services.AddEndpointsApiExplorer();
 		services.AddSwaggerGen();
-		services.AddNpgsql<DataContext>(configuration?.GetConnectionString("default")?.Decrypt());
 
-		ConfigureAutoMapper(services);
-		ConfigureDependencyInjection(services);
-	}
-
-	private static void ConfigureAutoMapper(IServiceCollection services)
-	{
-		services.AddAutoMapper(typeof(ClientProfile));
-	}
-
-	private static void ConfigureDependencyInjection(IServiceCollection services)
-	{
-		services.AddScoped<IRegistryApplication, RegistryApplication>();
-		services.AddScoped<IClientRepository, ClientRepository>();
+		services.ConfigureContext(configuration);
+		services.ConfigureAutoMapper();
+		services.ConfigureApplication();
 	}
 }
