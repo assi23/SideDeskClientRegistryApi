@@ -33,5 +33,6 @@ public class Program
 		services.ConfigureContext(configuration);
 		services.ConfigureAutoMapper();
 		services.ConfigureApplication();
+		services.ConfigureLogger();
 	}
 }
