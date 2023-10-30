@@ -2,7 +2,7 @@
 {
 	public interface IRepository<T> where T : class
 	{
-		void Create(T model);
-		int SaveChanges();
+		Task CreateAsync(T model);
+		Task<int> SaveChangesAsync();
 	}
 }

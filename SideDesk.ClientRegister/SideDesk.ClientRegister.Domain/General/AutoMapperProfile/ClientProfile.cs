@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SideDesk.ClientRegister.Application.Entities;
+using SideDesk.ClientRegister.Domain.Models.Registry.Get;
 using SideDesk.ClientRegister.Domain.Models.Registry.Registry;
 
 namespace SideDesk.ClientRegister.Domain.General.AutoMapperProfile
@@ -8,8 +9,10 @@ namespace SideDesk.ClientRegister.Domain.General.AutoMapperProfile
     {
         public ClientProfile()
         {
-            CreateMap<RegistryRequest, Client>().ReverseMap();
-            CreateMap<Client, RegistryResponse>().ReverseMap();
-        }
+            CreateMap<PostRegistryRequest, Client>().ReverseMap();
+            CreateMap<Client, PostRegistryResponse>().ReverseMap();
+
+			CreateMap<Client, GetRegistryResponse>().ReverseMap();
+		}
     }
 }

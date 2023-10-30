@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Moq;
 using SideDesk.ClientRegister.Application.Applications;
 using SideDesk.ClientRegister.Application.Entities;
@@ -14,29 +15,30 @@ namespace SideDesk.ClientRegister.Test
 		private readonly RegistryApplication _registryApplication;
 		private readonly Fixture _fixture = new();
 
-		private readonly Mock<IClientRepository> _clientRepository = new();
-		private readonly Mock<IMapper> _mapper = new();
+		private readonly Mock<IClientRepository> _clientRepositoryMock = new();
+		private readonly Mock<IMapper> _mapperMock = new();
+		private readonly Mock<ILogger<RegistryApplication>>  _loggerMock = new();
 
 		public RegistryApplicationRegistry()
 		{
-			_registryApplication = new RegistryApplication(_clientRepository.Object, _mapper.Object);
+			_registryApplication = new RegistryApplication(_clientRepositoryMock.Object, _mapperMock.Object, _loggerMock.Object);
 		}
 
 		[Fact(DisplayName = "Success")]
 		[Trait("Application", "Registry")]
-		public void Registry_ReturnSuccess()
+		public async Task Registry_ReturnSuccess()
 		{
 			//Arrange
-			var request = _fixture.Create<RegistryRequest>();
+			var request = _fixture.Create<PostRegistryRequest>();
 			var client = _fixture.Build<Client>().With(a => a.Name, request.Name).With(a => a.Document, request.Document).Create();
-			var registryResponse = _fixture.Build<RegistryResponse>().With(a => a.Name, client.Name).With(a => a.Document, client.Document).Create();
+			var registryResponse = _fixture.Build<PostRegistryResponse>().With(a => a.Name, client.Name).With(a => a.Document, client.Document).Create();
 
-			_clientRepository.Setup(a => a.SaveChanges()).Returns(1);
-			_mapper.Setup(a => a.Map<Client>(request)).Returns(client);
-			_mapper.Setup(a => a.Map<RegistryResponse>(client)).Returns(registryResponse);
+			_clientRepositoryMock.Setup(a => a.SaveChangesAsync()).ReturnsAsync(1);
+			_mapperMock.Setup(a => a.Map<Client>(request)).Returns(client);
+			_mapperMock.Setup(a => a.Map<PostRegistryResponse>(client)).Returns(registryResponse);
 
 			//Act
-			var response = _registryApplication.Registry(request);
+			var response = await _registryApplication.Registry(request);
 
 			//Assert
 			Assert.True(response.Success);
@@ -45,23 +47,25 @@ namespace SideDesk.ClientRegister.Test
 
 		[Fact(DisplayName = "Failure")]
 		[Trait("Application", "Registry")]
-		public void Registry_ReturnFalse()
+		public async Task Registry_ReturnFalse()
 		{
 			//Arrange
-			var request = _fixture.Build<RegistryRequest>().With(a=> a.Name,"Test").With(a=> a.Document, "123.123.123-12").Create();
+			var request = _fixture.Build<PostRegistryRequest>().With(a=> a.Name,"Test").With(a=> a.Document, "123.123.123-12").Create();
 			var client = _fixture.Build<Client>().With(a => a.Name, request.Name).With(a => a.Document, request.Document).Create();
-			var registryResponse = _fixture.Build<RegistryResponse>().With(a => a.Name, client.Name).With(a => a.Document, client.Document).Create();
+			var registryResponse = _fixture.Build<PostRegistryResponse>().With(a => a.Name, client.Name).With(a => a.Document, client.Document).Create();
 
-			_clientRepository.Setup(a => a.SaveChanges()).Returns(0);
-			_mapper.Setup(a => a.Map<Client>(request)).Returns(client);
-			_mapper.Setup(a => a.Map<RegistryResponse>(client)).Returns(registryResponse);
+			_clientRepositoryMock.Setup(a => a.SaveChangesAsync()).ReturnsAsync(0);
+			_mapperMock.Setup(a => a.Map<Client>(request)).Returns(client);
+			_mapperMock.Setup(a => a.Map<PostRegistryResponse>(client)).Returns(registryResponse);
 
 			//Act
-			var response = _registryApplication.Registry(request);
+			var response = await _registryApplication.Registry(request);
 
 			//Assert
 			Assert.False(response.Success);
-			Assert.Equal("Fail to registry client with document 123.123.123-12, try again later!", response.Messages.First());
+			Assert.Equal("An internal error occurred, try again later!", response.Messages.First());
 		}
+
+		//TODO test specified NullReferenceException
 	}
 }

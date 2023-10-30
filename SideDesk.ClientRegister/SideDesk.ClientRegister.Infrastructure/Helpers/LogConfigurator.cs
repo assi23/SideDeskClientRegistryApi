@@ -3,7 +3,7 @@ using Serilog.Events;
 
 namespace SideDesk.ClientRegister.Infrastructure.Helpers
 {
-	public  class LogConfigurator
+	public static class LogConfigurator
 	{
 		public static void CreateLog()
 		{

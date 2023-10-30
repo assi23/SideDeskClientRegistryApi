@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SideDesk.ClientRegister.Domain.General.Result;
 using SideDesk.ClientRegister.Domain.Interfaces.Application;
+using SideDesk.ClientRegister.Domain.Models.Registry.Get;
 using SideDesk.ClientRegister.Domain.Models.Registry.Registry;
 
 namespace SideDesk.ClientRegister.Api.Controllers
 {
-	[ApiController]
-	[Route("api/[controller]")]
+	[ApiController, Route("api/[controller]")]
 	public class RegistryController : ControllerBase
 	{
 		private readonly IRegistryApplication _registryApplication;
@@ -17,16 +17,26 @@ namespace SideDesk.ClientRegister.Api.Controllers
 		}
 
 		[HttpPost]
-		[ProducesResponseType(typeof(IResult<RegistryResponse>), StatusCodes.Status200OK)]
-		[ProducesResponseType(typeof(IResult<RegistryResponse>), StatusCodes.Status400BadRequest)]
-		public ActionResult<IResult<RegistryResponse>> Registry(RegistryRequest request)
+		[ProducesResponseType(typeof(IResult<PostRegistryResponse>), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(IResult<PostRegistryResponse>), StatusCodes.Status400BadRequest)]
+		public async Task<ActionResult<IResult<PostRegistryResponse>>> Registry(PostRegistryRequest request)
 		{
-			var registry =  _registryApplication.Registry(request);
+			var registry = await _registryApplication.Registry(request);
 
 			if (registry.Success)
 				return Ok(registry);
 
 			return BadRequest(registry);
+		}
+
+		[HttpGet]
+		[ProducesResponseType(typeof(IResult<GetRegistryResponse>), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(IResult<GetRegistryResponse>),StatusCodes.Status400BadRequest)]
+		public async Task<IResult<GetRegistryResponse>> Get(string document)
+		{ 
+			var registry = await _registryApplication.GetRegistry(document);
+
+			return registry;
 		}
 	}
 }

@@ -1,10 +1,12 @@
 ﻿using SideDesk.ClientRegister.Domain.General.Result;
+using SideDesk.ClientRegister.Domain.Models.Registry.Get;
 using SideDesk.ClientRegister.Domain.Models.Registry.Registry;
 
 namespace SideDesk.ClientRegister.Domain.Interfaces.Application
 {
 	public interface IRegistryApplication
 	{
-		IResult<RegistryResponse> Registry(RegistryRequest request);
+		Task<IResult<PostRegistryResponse>> Registry(PostRegistryRequest request);
+		Task<IResult<GetRegistryResponse>> GetRegistry(string document);
 	}
 }

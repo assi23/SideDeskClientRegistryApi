@@ -5,5 +5,6 @@ namespace SideDesk.ClientRegister.Domain.Interfaces.Repositories
 {
 	public interface IClientRepository : IRepository<Client>
 	{
+		Task<Client?> GetClientByDocumentAsync(string document);
 	}
 }

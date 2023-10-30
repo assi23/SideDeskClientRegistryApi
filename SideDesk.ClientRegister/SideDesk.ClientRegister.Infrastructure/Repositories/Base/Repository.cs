@@ -4,7 +4,7 @@ using SideDesk.ClientRegister.Infrastructure.Context;
 
 namespace SideDesk.ClientRegister.Infrastructure.Repositories.Base
 {
-	public class Repository<T> : IRepository<T> where T : class
+	public abstract class Repository<T> : IRepository<T> where T : class
 	{
 		public DataContext context;
 		public DbSet<T> Set;
@@ -15,7 +15,14 @@ namespace SideDesk.ClientRegister.Infrastructure.Repositories.Base
 			Set = dataContext.Set<T>();
 		}
 
-		public void Create(T entity) => Set.Add(entity);
-		public int SaveChanges() => context.SaveChanges();
+		public async Task CreateAsync(T entity)
+		{
+			await Set.AddAsync(entity);
+		}
+
+		public async Task<int> SaveChangesAsync()
+		{
+			return await context.SaveChangesAsync();
+		}
 	}
 }
